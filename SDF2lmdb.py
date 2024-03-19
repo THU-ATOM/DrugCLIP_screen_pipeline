@@ -75,4 +75,26 @@ if __name__ == "__main__":
         mol_data = process_sdf_file(os.path.join(home,f))
         num = write_lmdb(mol_data,output, num)
         print(f'Finished processing {f}, {len(mol_data)} molecules added, currently {num} molecules in the LMDB.')
-    
+    """
+    {'ChemBridge_CORE_Library_Stock_Part1_202312': 439762, 
+     'ChemBridge_CORE_Library_Stock_Part2_202312': 431710,
+     'ChemBridge_EXPRESS_Library_Stock_202312': 501317, 
+     'ChemDiv_3D_Biodiversity_Library': 27658, 
+     'ChemDiv_3D_Diversity_Natural_Product_Like_Library': 17653, 
+     'ChemDiv_3D_Pharm_Dversity_Library': 47486, 
+     'ChemDiv_BMS_300k': 299963, 
+     'ChemDiv_Fast_follow_up_SAR_library': 155636, 
+     'ChemDiv_MCE_18_Trends_Medicinal_Chemistry_Library': 50789, 
+     'ChemDiv_SmartTM_Library': 50213, 
+     'ChemDiv_Soluble_Diversity_Library': 15496, 
+     'ChemDiv_Targeted_Diversity_Library': 39646, 
+     'ChemDiv_diversity_100k': 100000, 
+     'ChemDiv_diversity_150k': 149981, 
+     'ChemDiv_diversity_50k': 50000, 
+     'Enamine_Hit_Locator_Library_HLL460k_20220221': 460129, 
+     'LC_10k_Pre_Plated_Diversity_Set_PS6': 9920, 
+     'LC_15k_Pre_Plated_Diversity_Set_PS4': 15040, 
+     'LC_15k_Pre_Plated_Diversity_Set_PS5': 15040, 
+     'LC_15k_Pre_Plated_Diversity_Set_PS6': 15040, 
+     'LC_50k_Pre_Plated_Diversity_Set_PS7': 50240}
+    """
