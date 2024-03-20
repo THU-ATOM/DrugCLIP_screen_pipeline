@@ -26,8 +26,7 @@ def read_dcfile(dcfile):
     result = []
     with open(dcfile,'r') as f:
         for lines in f.readlines()[1:]: #with header
-            ids_subset,zscore,smi=lines.strip().split(',')
-            ids,subset = ids_subset.split(';')
+            ids,subset,zscore,smi=lines.strip().split(',')
             try:
                 subset_dict[ids][-1].append(subset)
             except:
