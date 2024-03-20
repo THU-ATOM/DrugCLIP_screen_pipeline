@@ -28,4 +28,9 @@ def read_lmdb(lmdb_path):
     return set_count
 
 if __name__ == '__main__':
-    print(read_lmdb('/drug/DrugCLIP_chemdata_v2024/DrugCLIP_mols_v2024.lmdb'))
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('lmdb_path', type=str, help='lmdb path')
+    args = parser.parse_args()
+    set_count = read_lmdb(args.lmdb_path)
+    print(set_count)

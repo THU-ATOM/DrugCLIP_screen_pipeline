@@ -127,7 +127,10 @@ def PubChem_csv(csv_file):
     write_lmdb(mol_data, csv_file.replace('.csv','.lmdb'), 0)
 
 if __name__ == '__main__':
-    #PubChem_csv('/home/jiayinjun/Chem_Aware_Interaction_Understanding/data/SARS_PLP/PubChem/SARS_PLP_inactive.csv')
-    process_one_chembldir('/newhome/jiayj/DrugCLIP_screen_pipeline/targets/GammaSecretase/ChEMBL')
+    #arg 
+    parser = argparse.ArgumentParser(description='convert tsv to 3D mol')
+    parser.add_argument('dir', type=str, help='molecule information dir in ChEMBL format')
+    args = parser.parse_args()
+    process_one_chembldir(args.dir)
 
 

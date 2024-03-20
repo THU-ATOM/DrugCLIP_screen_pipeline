@@ -64,9 +64,14 @@ def process_sdf_file(sdf_file,n_cpu=32):
     return mol_data
 
 if __name__ == "__main__":
-    #mol_data = process_sdf_file('/drug/DrugCLIP_chemdata_v2024/SDFiles/LC_10k_Pre_Plated_Diversity_Set_PS6.sdf')
-    home = '/drug/DrugCLIP_chemdata_v2024/SDFiles'
-    output = '/drug/DrugCLIP_chemdata_v2024/DrugCLIP_mols_v2024.lmdb'
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('sdf_dir', type=str, help='a directory containing SDF files')
+    parser.add_argument('lmdb_path', type=str, help='output lmdb path')
+    args = parser.parse_args()
+
+    home = args.sdf_dir
+    output = args.lmdb_path
     num = 0
     #list home, sort all files from smallest to largest
     filelist = os.listdir(home)

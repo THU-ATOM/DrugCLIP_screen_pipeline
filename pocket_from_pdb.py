@@ -91,7 +91,7 @@ def pocket2lmdb(pocket_name,biopy_chain,pdb_name):
     }
 
 
-def process_one_pdbdir(dirs):
+def process_one_pdbdir(dirs,name='pocket'):
     all_pocket = []
     for d in os.listdir(dirs):
         if '.pdb' in d:
@@ -104,6 +104,13 @@ def process_one_pdbdir(dirs):
                 all_pocket += pocket
             except:
                 pass
-    write_lmdb(all_pocket,os.path.join(dirs,'pocket.lmdb'),0)
+    write_lmdb(all_pocket,os.path.join(dirs,f'{name}.lmdb'),0)
 if __name__ == '__main__':
-    process_one_pdbdir('/newhome/jiayj/DrugCLIP_screen_pipeline/targets/GammaSecretase/Pocket1')
+    #args
+    import argparse
+    parser = argparse.ArgumentParser(description='extract pocket from pdb')
+    parser.add_argument('dir', type=str, help='pdb dir with file names of name_hetid')
+    parser.add_argument('--name', type=str, help='name of the output lmdb',default='pocket')
+    args = parser.parse_args()
+
+    process_one_pdbdir(args.dir,args.name)
