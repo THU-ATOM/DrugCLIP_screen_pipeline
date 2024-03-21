@@ -50,13 +50,10 @@ def process_one_pair(pdbfile,sdfile,outputfile):
     write_lmdb(pocket,outputfile,0)
 
 if __name__ == '__main__':
-    process_one_pair('/newhome/jiayj/DrugCLIP_screen_pipeline/targets/GammaSecretase/Pocket2/E2012andL458_clean.pdb',
-                     '/newhome/jiayj/DrugCLIP_screen_pipeline/targets/GammaSecretase/Pocket2_round1/outputs/E2012andL458_glidgrid0.sdf',
-                     '/newhome/jiayj/DrugCLIP_screen_pipeline/targets/GammaSecretase/Pocket2/Pocket2_round2.lmdb')
-    # import argparse
-    # parser = argparse.ArgumentParser(description='extract binding pockets from pdb and sdf')
-    # parser.add_argument('pdb', type=str, help='pdb file')
-    # parser.add_argument('sdf', type=str, help='sdf file')
-    # parser.add_argument('output', type=str, help='output lmdb')
-    # args = parser.parse_args()
-    # process_one_pair(args.pdb,args.sdf,args.output)
+    import argparse
+    parser = argparse.ArgumentParser(description='extract binding pockets from pdb and sdf')
+    parser.add_argument('pdb', type=str, help='pdb file')
+    parser.add_argument('sdf', type=str, help='sdf file')
+    parser.add_argument('output', type=str, help='output lmdb')
+    args = parser.parse_args()
+    process_one_pair(args.pdb,args.sdf,args.output)
