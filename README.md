@@ -42,7 +42,7 @@ You can use any other tools for virtual screening, but for further processing, y
 MolName,ChemSupplier,Score,SMILES
 ```
 
-### 4. The novelty filer and clustering
+### 4. The novelty filter and clustering
 
 We usually want molecules with novel structures (or cores), and for wet-lab screening, we often cannot afford a lot of molecules with similar structures. To remove molecules that are similar to known binders, you need to download activity data from the [ChEMBL](https://www.ebi.ac.uk/chembl/) website. Together with clustering, run:
 
