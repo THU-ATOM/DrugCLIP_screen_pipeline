@@ -10,7 +10,7 @@ def process_multiple_mae(filelist,output_dir,gbsa):
         lig_dict = process_one_mae(f.strip(),lig_dict,gbsa)
     with open(os.path.join(output_dir,f'ligands.aff'),'w') as f:
         for name in lig_dict:
-            f.write(f"{name}\t{lig_dict[name][0]}\t{lig_dict[name][2]}\n")
+            f.write(f"{name}\t{lig_dict[name][0]:.2f}\t{lig_dict[name][2]}\n")
     
     for name in lig_dict:
         with open(os.path.join(output_dir,f'{lig_dict[name][2]}.sdf'),'a') as sdfFile:
