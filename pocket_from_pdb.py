@@ -94,7 +94,7 @@ def pocket2lmdb(pocket_name,biopy_chain,pdb_name):
 def process_one_pdbdir(dirs,name='pocket'):
     all_pocket = []
     for d in os.listdir(dirs):
-        if '.pdb' in d:
+        if '.pdb' in d and '_clean' not in d:
             try:
                 p = PDBParser()
                 model = p.get_structure('0',os.path.join(dirs,d))[0]  
