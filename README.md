@@ -70,7 +70,7 @@ Physical_Core_Number >= min(max_process,pdb_num) * ncpu_pergrid
 
 ### 6. Recycle to increase pocket diversity
 
-DrugCLIP is designed to handle and ensemble multiple pockets at the same time. If you have only one holo PDB structure and your ligand cannot fully occupy the cavity, you can use this recycling strategy. Extract new pockets with the docking results from the previous step, and do **step 3-5** again:
+DrugCLIP is designed to handle pocket ensembles, capturing diversified binding modes at the same time. If you have only one holo PDB structure and your ligand cannot fully occupy the cavity, you can use this recycling strategy. Extract new pockets with the docking results from the previous step, and do **step 3-5** again:
 
 ```
 #extract pockets with docking results
