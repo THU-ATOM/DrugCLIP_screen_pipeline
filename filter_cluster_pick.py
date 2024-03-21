@@ -51,7 +51,7 @@ def cluster_pick(home,smi,subset_dict,fp='maccs',dist=0.5,):
             f.write(f'{name},{subset},{subset_dict[name][1]},{subset_dict[name][0]}\n')       
     f.close() 
 
-def filter_cluster_pick(dcfile,exclude_folder,output_dir,fp_cluster='maccs',cluster_dict=0.5,fp_exclude='radial',cutoff=0.35,n_cpu=32):
+def filter_cluster_pick(dcfile,exclude_folder,output_dir,fp_cluster='maccs',cluster_dict=0.5,fp_exclude='radial',cutoff=0.30,n_cpu=32):
     dc_mols,subset_dict = read_dcfile(dcfile)
     with open(os.path.join(output_dir,'dc_smiles.smi'),'w') as f:
         f.writelines(dc_mols)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     parser.add_argument('--fp_cluster', type=str, default='maccs', help='fingerprint for clustering')
     parser.add_argument('--cluster_dict', type=float, default=0.5, help='distance for clustering')
     parser.add_argument('--fp_exclude', type=str, default='radial', help='fingerprint for exclusion')
-    parser.add_argument('--cutoff', type=float, default=0.35, help='cutoff for exclusion')
+    parser.add_argument('--cutoff', type=float, default=0.30, help='cutoff for exclusion')
     parser.add_argument('--n_cpu', type=int, default=32, help='number of cpu')
     args = parser.parse_args()
     filter_cluster_pick(args.dcfile,args.exclude_folder,args.output_dir,args.fp_cluster,args.cluster_dict,args.fp_exclude,args.cutoff,args.n_cpu)
