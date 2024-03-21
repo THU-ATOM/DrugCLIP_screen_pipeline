@@ -10,7 +10,7 @@ Then, prepare a python environment with:
 pip install pandas numpy biopython lmdb rdkit
 ```
 
-### 1. Prepare chemical library for [DrugCLIP](https://openreview.net/forum?id=lAbCgNcxm7&referrer=%5Bthe%20profile%20of%20Yanyan%20Lan%5D(%2Fprofile%3Fid%3D~Yanyan_Lan2))
+### 1. Prepare chemical library for [DrugCLIP](https://github.com/bowen-gao/DrugCLIP)
 
 SDF files are usually provided by chemical suppliers like [ChemDiv](https://www.chemdiv.com/catalog/diversity-libraries/), [Enamine](https://enamine.net/compound-libraries/diversity-libraries) or [LifeChemicals](https://lifechemicals.com/screening-libraries/pre-plated-diversity-sets).
 
