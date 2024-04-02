@@ -14,12 +14,12 @@ def read_pdb(pdb_file):
             y = float(line[38:46])
             z = float(line[46:54])
             xyz.append([x,y,z])
-        elif line.startswith('Grid_score'):
+        elif line.startswith('interface_delta_X'):
             score = float(line.split()[1])
             break
     return np.array(xyz), score
 
-def pick_conf(pdb_dir,output_dir,subname='',thres=(3,12)):
+def pick_conf(pdb_dir,output_dir,subname='',thres=(-5,3,12)):
     name = []
     coord = []
     score = []
@@ -33,12 +33,15 @@ def pick_conf(pdb_dir,output_dir,subname='',thres=(3,12)):
     coord = np.array(coord)
     score = np.array(score)
     name = np.array(name)
+    name = name[score<=thres[0]]
+    coord = coord[score<=thres[0]]
+    score = score[score<=thres[0]]
     while len(score)>0:
         #pick the first one
         idx = np.argmin(score)
         picked_pdb.append(deepcopy(name[idx]))
         distance = np.linalg.norm(coord-coord[idx],axis=-1)
-        accepted_idx = ((distance>thres[0]).sum(axis=-1))>thres[1]
+        accepted_idx = ((distance>thres[1]).sum(axis=-1))>thres[2]
         coord = coord[accepted_idx]
         score = score[accepted_idx]
         name = name[accepted_idx]
@@ -52,5 +55,5 @@ if __name__ == '__main__':
     parser.add_argument('pdb_dir', type=str, help='pdb dir')
     parser.add_argument('output_dir', type=str, help='output dir')
     parser.add_argument('--pdb_prefix', type=str, help='only pdb files startwith the prefix will be used, default all pdb',default='')
-    parser.add_argument('--threshold', type=float, nargs=2, help='threshold for picking conformers, (r,n) means at least n atoms have rmsd of r, default (3,12)',default=(3,12))
+    parser.add_argument('--threshold', type=float, nargs=3, help='threshold for picking conformers, (s,r,n) means reject all models with score >s and all accepted models have at least n atoms have rmsd of r, default (-5,3,12)',default=(-5,3,12))
     pick_conf(parser.pdb_dir,parser.output_dir,parser.pdb_prefix,parser.threshold)
