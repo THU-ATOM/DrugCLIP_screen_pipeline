@@ -70,7 +70,7 @@ def extract_lig_recpt(biopy_model,ligname):
 def get_binding_pockets(biopy_chain,liglist):
     pockets = []
     for n,lig in liglist:
-            lig_coord = np.array([i.coord for i in lig.get_atoms()])
+            lig_coord = np.array([i.coord for i in lig.get_atoms() if i.element!='H'])
             tmp_chain = Chain.Chain('A') 
             for res in biopy_chain:
                 res_coord = np.array([i.get_coord() for i in res.get_atoms()])
@@ -82,8 +82,9 @@ def get_binding_pockets(biopy_chain,liglist):
 
 def pocket2lmdb(pocket_name,biopy_chain,pdb_name):
     recpt = list(biopy_chain.get_atoms())
-    pocket_atom_type = [x.element for x in recpt]
-    pocket_coord = [x.coord for x in recpt]
+    pocket_atom_type = [x.element for x in recpt if x.element!='H']
+    pocket_coord = [x.coord for x in recpt if x.element!='H']
+    print(pdb_name+'_'+pocket_name,len(pocket_atom_type))
     return {
         'pocket': pdb_name+'_'+pocket_name,
         'pocket_atoms': pocket_atom_type,
