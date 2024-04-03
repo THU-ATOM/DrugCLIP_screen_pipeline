@@ -1,7 +1,8 @@
 import os
 import multiprocessing as mp
 from tqdm import tqdm
-
+from rdkit import Chem
+from rdkit.Chem import Descriptors
 clean_up_list = []
 ROS = '/drug/rosetta.binary.linux.release-315/main'
 PY27 = '/home/jiayinjun/miniconda3/envs/py27/bin/python'
@@ -13,7 +14,7 @@ RSC = f'{ROS}/source/bin/rosetta_scripts.static.linuxgccrelease'
 ROP = os.path.join(os.path.dirname(os.path.abspath(__file__)),'RosettaLigandOptions.txt')
 XML = os.path.join(os.path.dirname(os.path.abspath(__file__)),'flexible_docking.xml')
 
-def rosetta_docking(lig_sdf_string,prot_name,work_dir,n_pose=1):
+def rosetta_docking(lig_sdf_string,prot_name,work_dir,n_pose=5):
     os.chdir(work_dir)
     tmp_files = []
     lig_name = lig_sdf_string.split('\n')[0]
@@ -22,6 +23,11 @@ def rosetta_docking(lig_sdf_string,prot_name,work_dir,n_pose=1):
             f.write(lig_sdf_string)
             f.write('$$$$\n')
         tmp_files.append(f'{lig_name}.sdf')
+        #read sdf file with rdkit and calculate molecular weight
+        mol = Chem.SDMolSupplier(f'{lig_name}.sdf')[0]
+        mw = Descriptors.MolWt(mol)
+        if mw>575 or mw<200: #docking relatively large mols to the pocket to enlarge it, avoid super large ligands
+            raise ValueError('molecular weight out of range')
         os.system(f'''
 {BCL} molecule:Filter -add_h -defined_atom_types \
   -3d -input_filenames {lig_name}.sdf \
@@ -60,7 +66,7 @@ cat {prot_name}_clean_A.pdb {lig_name}.pdb > {prot_name}_{lig_name}.pdb
         if os.path.exists(f):
             os.remove(f)    
 
-def flexible_docking(protein_dir,ligand_dir,output_dir,n_cpu=32):
+def flexible_docking(protein_dir,ligand_dir,output_dir,n_pose=5,n_cpu=32):
     os.chdir(output_dir)
     prot_list=[]
     lig_list=[]
@@ -82,7 +88,7 @@ def flexible_docking(protein_dir,ligand_dir,output_dir,n_cpu=32):
     def update(*a):
         tbar.update()
     for lig_sdf_string,prot_name in list(zip(lig_list,prot_list)):
-        pool.apply_async(rosetta_docking,args=(lig_sdf_string,prot_name,output_dir),callback=update)
+        pool.apply_async(rosetta_docking,args=(lig_sdf_string,prot_name,output_dir,n_pose),callback=update)
     pool.close()
     pool.join()
 
@@ -95,4 +101,7 @@ if __name__ == "__main__":
     parser.add_argument('protein_dir', type=str, help='protein dir')
     parser.add_argument('ligand_dir', type=str, help='ligand dir')
     parser.add_argument('output_dir', type=str, help='output dir')
+    parser.add_argument('--n_pose', type=int, help='number of poses to generate for each ligand',default=5)
     parser.add_argument('--n_cpu', type=int, help='number of cpu to use',default=32)
+    args = parser.parse_args()
+    flexible_docking(args.protein_dir,args.ligand_dir,args.output_dir,args.n_pose,args.n_cpu)
