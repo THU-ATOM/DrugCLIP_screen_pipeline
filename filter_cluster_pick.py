@@ -53,19 +53,23 @@ def cluster_pick(home,smi,subset_dict,fp='maccs',dist=0.5,):
 
 def filter_cluster_pick(dcfile,exclude_folder,output_dir,fp_cluster='maccs',cluster_dict=0.5,fp_exclude='radial',cutoff=0.30,n_cpu=32):
     dc_mols,subset_dict = read_dcfile(dcfile)
-    with open(os.path.join(output_dir,'dc_smiles.smi'),'w') as f:
-        f.writelines(dc_mols)
-    with open(os.path.join(output_dir,'active_smiles.smi'),'w') as f:
-        f.writelines(extract_smi_from_dir(exclude_folder))
-    os.chdir(output_dir)
-    os.system(f"{SCHRODINGER}/utilities/canvasFPGen -JOB active_smiles -ismi {os.path.join(output_dir,'active_smiles.smi')} -o {os.path.join(output_dir,'active_smiles.fp')} -fptype {fp_exclude} -xp -compress -WAIT")
-    os.system(f"{SCHRODINGER}/utilities/canvasFPGen -JOB dc_smiles -ismi {os.path.join(output_dir,'dc_smiles.smi')} -o {os.path.join(output_dir,'dc_smiles.fp')} -fptype {fp_exclude} -xp -compress -WAIT")    
-    # os.system(f"{SCHRODINGER}/utilities/canvasDBCS -JOB  -HOST localhost:{n_cpu} -ifp {os.path.join(output_dir,'dc_smiles.fp')} -ifp2 {os.path.join(output_dir,'active_smiles.fp')} -n {n_mols} -d {cutoff} -o {os.path.join(output_dir,'DBCS.out')} -WAIT")   
-    os.system(f"{SCHRODINGER}/utilities/canvasFPMatrix -JOB novelty_filter -HOST localhost:{n_cpu} -ifp {os.path.join(output_dir,'dc_smiles.fp')} -ifp2 {os.path.join(output_dir,'active_smiles.fp')} -filter {cutoff} -capcol 1 -ocsv {os.path.join(output_dir,'exclude_active.csv')} -WAIT")
-    excluded = []
-    with open(os.path.join(output_dir,'exclude_active.csv'),'r') as f:
-        for lines in f:
-            excluded.append(lines.split(',')[0])
+    if os.path.isdir(exclude_folder):
+        with open(os.path.join(output_dir,'dc_smiles.smi'),'w') as f:
+            f.writelines(dc_mols)
+        with open(os.path.join(output_dir,'active_smiles.smi'),'w') as f:
+            f.writelines(extract_smi_from_dir(exclude_folder))
+        os.chdir(output_dir)
+        os.system(f"{SCHRODINGER}/utilities/canvasFPGen -JOB active_smiles -ismi {os.path.join(output_dir,'active_smiles.smi')} -o {os.path.join(output_dir,'active_smiles.fp')} -fptype {fp_exclude} -xp -compress -WAIT")
+        os.system(f"{SCHRODINGER}/utilities/canvasFPGen -JOB dc_smiles -ismi {os.path.join(output_dir,'dc_smiles.smi')} -o {os.path.join(output_dir,'dc_smiles.fp')} -fptype {fp_exclude} -xp -compress -WAIT")    
+        # os.system(f"{SCHRODINGER}/utilities/canvasDBCS -JOB  -HOST localhost:{n_cpu} -ifp {os.path.join(output_dir,'dc_smiles.fp')} -ifp2 {os.path.join(output_dir,'active_smiles.fp')} -n {n_mols} -d {cutoff} -o {os.path.join(output_dir,'DBCS.out')} -WAIT")   
+        os.system(f"{SCHRODINGER}/utilities/canvasFPMatrix -JOB novelty_filter -HOST localhost:{n_cpu} -ifp {os.path.join(output_dir,'dc_smiles.fp')} -ifp2 {os.path.join(output_dir,'active_smiles.fp')} -filter {cutoff} -capcol 1 -ocsv {os.path.join(output_dir,'exclude_active.csv')} -WAIT")
+        excluded = []
+        with open(os.path.join(output_dir,'exclude_active.csv'),'r') as f:
+            for lines in f:
+                excluded.append(lines.split(',')[0])
+    else:
+        excluded = []
+        Warning.warn(f'{exclude_folder} is not a directory, no exclusion will be performed.')
     f = open(os.path.join(output_dir,'dc_smiles_novel.smi'),'w') 
     g = open(os.path.join(output_dir,'dc_smiles_excluded.smi'),'w') 
     for lines in dc_mols:
