@@ -29,7 +29,7 @@ DrugCLIP needs pre-defined pockets for screening. We recommend you use experimen
 After downloading your receptor-ligand structures from the PDB database, you should rename them as **PDBName_HetID.pdb**, where HetID is the molecule that defines the pocket. Put all PDB files into one folder, and run:
 
 ```
-python pocket_from_pdb.py your_pdb_folder your_lmdb_name
+python pocket_from_pdb.py your_pdb_folder --name your_lmdb_name
 ```
 
 The output LMDB file is located in the same folder as your PDB files
