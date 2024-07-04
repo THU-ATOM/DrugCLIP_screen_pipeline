@@ -1,7 +1,7 @@
 SCHRODINGER = '/opt/schrodinger2021-2'
 import os
 import pandas as pd
-
+from warnings import warn
 def extract_smi_from_dir(dirs,thres_active=100000):
     smi_list = set({})
     for f in os.listdir(dirs):
@@ -69,7 +69,7 @@ def filter_cluster_pick(dcfile,exclude_folder,output_dir,fp_cluster='maccs',clus
                 excluded.append(lines.split(',')[0])
     else:
         excluded = []
-        Warning.warn(f'{exclude_folder} is not a directory, no exclusion will be performed.')
+        warn(f'{exclude_folder} is not a directory, no exclusion will be performed.')
     f = open(os.path.join(output_dir,'dc_smiles_novel.smi'),'w') 
     g = open(os.path.join(output_dir,'dc_smiles_excluded.smi'),'w') 
     for lines in dc_mols:

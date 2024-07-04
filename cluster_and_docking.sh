@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Accepting the file path, directory, and name as command line arguments
-file_path=$1
-dir=$2
-name=$3
-chembl=$4
-pdb=$5
+file_path=$1 #drugclip output file
+dir=$2  # directory for the whole target protein
+name=$3 # name of current output files eg round2_out
+chembl=$4 #directory name for chembl file eg ChEMBL
+pdb=$5 #directory name for pdb file eg round2
 
 # Creating the necessary directories
 mkdir -p "$dir/$name/cluster"
